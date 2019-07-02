@@ -1,25 +1,24 @@
 from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
 
-# Each skill is contained within its own class, which inherits base methods
-# from the MycroftSkill class.  You extend this class as shown below.
-
 
 class SelfEsteemSkill(MycroftSkill):
 
-    @intent_handler(IntentBuilder("BeautifulIntent").require("Beautiful").require("pronoun"))
-    def handle_beautiful_intent(self, message):
-        if message.data["pronoun"] == "i":
-            self.speak_dialog("you.are.beautiful")
+    def __init__(self):
+        super(SelfEsteemSkill, self).__init__(name="SelfEsteemSkill")
 
-    # The "stop" method defines what Mycroft does when told to stop during
-    # the skill's execution. In this case, since the skill's functionality
-    # is extremely simple, there is no need to override it.  If you DO
-    # need to implement stop, you should return True to indicate you handled
-    # it.
-    #
-    # def stop(self):
-    #    return False
+    @intent_handler(IntentBuilder("BeautifulIntent").require("Beautiful").optional("pronoun"))
+    def handle_beautiful_intent(self, message):
+        self.speak_dialog("you.are.beautiful")
+
+    @intent_handler(IntentBuilder("SmartIntent").require("Smart").optional("pronoun"))
+    def handle_smart_intent(self, message):
+        self.speak_dialog("you.are.smart")
+
+    @intent_handler(IntentBuilder("StupidIntent").require("Smart").optional("pronoun"))
+    def handle_stupid_intent(self, message):
+        self.speak_dialog("of.course.not")
+        self.speak_dialog("you.are.smart")
 
 
 def create_skill():
